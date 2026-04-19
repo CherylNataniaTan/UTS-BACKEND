@@ -1,19 +1,25 @@
-require('dotenv').config() 
-
-const express = require("express");
-const mongoose = require("mongoose");
-
+const express = require('express');
 const app = express();
+const connectDB = require('./core/database');
+const logger = require('./utils/logger');
+
+const PORT = 3000;
+
 app.use(express.json());
 
-const routes = require("./routes/routes");
+connectDB();
 
-app.use("/", routes);
+const routes = require('./api/routes');
+app.use(routes);
+app.use(require('./api/components/topups/topups-route')); 
 
-mongoose.connect("mongodb://127.0.0.1:27017/digitalBanking")
-  .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log(err));
+app.listen(PORT, () => {
+  logger.info(`Server berjalan di http://localhost:${PORT}`);
+});
 
-app.listen(5000, () => {
-  console.log("Server jalan di port 5000");
+app.use((err, req, res, next) => {
+  console.error('ERROR MIDDLEWARE:', err);
+  res.status(500).json({
+    message: err.message || 'Internal Server Error',
+  });
 });
