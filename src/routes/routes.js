@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const cardsController = require('../api/components/Cards/cards-controller'); // pastikan path benar
-const securityController = require('../api/components/Security/security-controller');
+const express = require('express');
+const accounts = require('./components/accounts/accounts-route');
+const balances = require('./components/balances/balances-route');
+
+
 
 router.get('/cards', cardsController.getCards);
 router.get('/cards/:id', cardsController.getCard);
@@ -14,3 +17,9 @@ router.get('/security', securityController.getAll);
 router.get('/security/:id', securityController.getById);
 
 module.exports = router;
+
+module.exports = (app) => {
+  // Pastikan memanggil fungsi route
+  accounts(app);
+  balances(app);
+};
