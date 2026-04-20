@@ -10,7 +10,9 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB error:", err));
 
-app.use("/api", require("./api/routes"));
+
+const routes = require("./api/routes");
+routes(app); // Panggil fungsinya agar accounts(app) dan balances(app) jalan
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);

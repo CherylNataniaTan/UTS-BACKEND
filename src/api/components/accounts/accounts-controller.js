@@ -28,7 +28,7 @@ async function createAccount(request, response, next) {
     }
 
     const account = await accountsService.createAccount(namaPemilik, nomorRekening);
-    return response.status(201).json(newAccount);
+    return response.status(200).json(newAccount);
   } catch (error) {
     return next(error);
   }
