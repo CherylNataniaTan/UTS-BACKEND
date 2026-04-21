@@ -1,57 +1,78 @@
+console.log("🔥 BALANCES CONTROLLER KEPAKE");
 const balancesService = require('./balances-service');
+const { errorResponder, errorTypes } = require('../../../core/errors');
 
-async function getBalances(request, response, next) {
+async function getAllBalances(req, res, next) {
   try {
-    const balances = await balancesService.getBalances();
-    return response.status(200).json(balances);
-  } catch (error) {
-    return next(error);
-  }
-}
-
-async function getBalance(request, response, next) {
-  try {
-    const balance = await balancesService.getBalance(request.params.id);
-    if (!balance) return response.status(404).json({ message: 
-        'Bank sedang eror. Data saldo tidak ditemukan, silahkan coba lagi nanti' 
-
+    const data = await balancesService.getAllBalances();
+    return res.status(200).json({
+      success: true,
+      data,
     });
-    return response.status(200).json(balance);
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    return next(err);
   }
 }
 
-async function createBalance(request, response, next) {
+async function getBalanceByAccountNumber(req, res, next) {
   try {
-    const { accountId, jumlahSaldo } = request.body;
-    if (!accountId || jumlahSaldo === undefined) {
-      return response.status(400).json({ message: 'Account ID dan jumlah saldo wajib diisi' });
+    const { accountNumber } = req.params;
+
+    const data = await balancesService.getBalanceByAccountNumber(accountNumber);
+
+    if (!data) {
+      throw errorResponder(errorTypes.NOT_FOUND, 'Balance tidak ditemukan');
     }
-    const balance = await balancesService.createBalance(accountId, jumlahSaldo);
-    return response.status(201).json(balance);
-  } catch (error) {
-    return next(error);
+
+    return res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (err) {
+    return next(err);
   }
 }
 
-async function updateBalance(request, response, next) {
+async function createBalance(req, res, next) {
   try {
-    const { jumlahSaldo } = request.body;
-    if (jumlahSaldo === undefined) return response.status(400).json({ message: 'Jumlah saldo baru wajib diisi' });
+    const result = await balancesService.createBalance(req.body);
 
-    const balance = await balancesService.updateBalance(request.params.id, jumlahSaldo);
-    if (!balance) return response.status(404).json({ message: 'Gagal update, data tidak ditemukan' });
-    
-    return response.status(200).json(balance);
-  } catch (error) {
-    return next(error);
+    return res.status(201).json({
+      success: true,
+      data: result,
+    });
+  } catch (err) {
+    return next(err);
   }
 }
+
+async function updateBalance(req, res, next) {
+  try {
+    const { accountNumber } = req.params;
+
+    const updated = await balancesService.updateBalance(
+      accountNumber,
+      req.body
+    );
+
+    if (!updated) {
+      throw errorResponder(errorTypes.NOT_FOUND, 'Balance tidak ditemukan');
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: updated,
+    });
+  } catch (err) {
+    return next(err);
+  }
+}
+
+
 
 module.exports = {
-  getBalances,
-  getBalance,
+  getAllBalances,
+  getBalanceByAccountNumber,
   createBalance,
   updateBalance,
 };

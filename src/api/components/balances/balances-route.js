@@ -1,13 +1,10 @@
-const express = require('express');
 const balancesController = require('./balances-controller');
 
 module.exports = (app) => {
-  const router = express.Router();
+  console.log("Balances route loaded");
 
-  app.use('/balances', router);
-
-  router.get('/', balancesController.getBalances);
-  router.get('/:id', balancesController.getBalance);
-  router.post('/', balancesController.createBalance);
-  router.patch('/:id', balancesController.updateBalance);
+  app.get('/balances', balancesController.getAllBalances);
+  app.post('/balances', balancesController.createBalance);
+  app.get('/balances/:accountNumber', balancesController.getBalanceByAccountNumber);
+  app.patch('/balances/:accountNumber', balancesController.updateBalance);
 };

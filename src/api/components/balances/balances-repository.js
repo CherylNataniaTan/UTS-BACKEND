@@ -1,31 +1,33 @@
-const Balance = require('../../models/balances-schema');
+const { Balances } = require('../../../models');
 
-async function getBalances() {
-  return Balance.find({}).populate('accountId', 'namaPemilik nomorRekening');
+async function findAll() {
+  return await Balances.find().sort({ lastUpdated: -1 });
 }
 
-async function getBalanceById(id) {
-  return Balance.findById(id).populate('accountId');
-}
-
-async function createBalance(accountId, jumlahSaldo) {
-  return Balance.create({ 
-    accountId, 
-    jumlahSaldo 
+// ✅ cari pakai accountNumber
+async function findByAccountNumber(accountNumber) {
+  return await Balances.findOne({
+    accountNumber: String(accountNumber),
   });
 }
 
-async function updateBalance(id, jumlahSaldo) {
-  return Balance.findByIdAndUpdate(
-    id, 
-    { jumlahSaldo, updatedAt: Date.now() }, 
+async function create(data) {
+  return await Balances.create(data);
+}
+
+// ✅ update pakai accountNumber
+async function updateByAccountNumber(accountNumber, data) {
+  return await Balances.findOneAndUpdate(
+    { accountNumber: String(accountNumber) },
+    data,
     { new: true }
   );
 }
 
+
 module.exports = {
-  getBalances,
-  getBalanceById,
-  createBalance,
-  updateBalance,
+  findAll,
+  findByAccountNumber,
+  create,
+  updateByAccountNumber,
 };

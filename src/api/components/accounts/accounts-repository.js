@@ -1,39 +1,37 @@
-const Account = require('../../models/accounts-schema');
-const Balance = require('../../models/balances-schema');
+console.log("🔥 REPOSITORY BARU KELOAD 🔥");
+const { Accounts } = require('../../../models');
 
-//ngambil semua data account dr database
-async function getAccounts() {
-  return Account.find({});
+async function findAll() {
+  return await Accounts.find().sort({ createdAt: -1 });
 }
 
-//mengambil detail account berdasarkan ID
-async function getAccountById(id) {
-  return Account.findById(id);
+async function findByAccountNumber(accountNumber) {
+  return await Accounts.findOne({ accountNumber: String(accountNumber) });
 }
 
-//menambah data account baru ke database
-async function createAccount(namaPemilik, nomorRekening, jenisTabungan) {
-  return Account.create({
-    namaPemilik,
-    nomorRekening,
-    jenisTabungan,
+async function create(data) {
+  return await Accounts.create(data);
+}
+
+
+async function updateByAccountNumber(accountNumber, data) {
+  return await Accounts.findOneAndUpdate(
+    { accountNumber: String(accountNumber) },
+    data,
+    { new: true }
+  );
+}
+
+async function deleteByAccountNumber(accountNumber) {
+  return await Accounts.findOneAndDelete({
+    accountNumber: String(accountNumber),
   });
 }
 
-//update data account
-async function updateAccount(id, data) {
-  return Account.findByIdAndUpdate(id, data, { new: true });
-}
-
-//delete account
-async function deleteAccount(id) {
-  return Account.findByIdAndDelete(id);
-}
-
 module.exports = {
-  getAccounts,
-  getAccountById,
-  createAccount,
-  updateAccount,
-  deleteAccount,
+  findAll,
+  findByAccountNumber,
+  create,
+  updateByAccountNumber,
+  deleteByAccountNumber,
 };

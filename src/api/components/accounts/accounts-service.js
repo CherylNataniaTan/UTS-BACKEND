@@ -1,29 +1,43 @@
+console.log("🔥 SERVICE KELOAD 🔥");
 const accountsRepository = require('./accounts-repository');
-const balancesRepository = require('../balances/balances-repository');
 
-async function getAccounts() {
-  return await accountsRepository.getAccounts();
+function generateAccountNumber() {
+  return Math.floor(1000000000 + Math.random() * 9000000000).toString();
 }
 
-async function getAccount(id) {
-  return await accountsRepository.getAccountById(id);
+async function getAllAccounts() {
+  return await accountsRepository.findAll();
 }
 
-async function createAccount(namaPemilik, nomorRekening) {
-  return await accountsRepository.createAccount(namaPemilik, nomorRekening);
+async function getAccountByNumber(accountNumber) {
+  return await accountsRepository.findByAccountNumber(accountNumber);
 }
 
-async function updateAccount(id, data) {
-  return await accountsRepository.updateAccount(id, data);
+async function createAccount(data) {
+  const { accountName, ownerName, accountType } = data;
+
+  const payload = {
+    accountNumber: generateAccountNumber(),
+    accountName,
+    ownerName,
+    accountType: accountType || 'Tabungan',
+    createdAt: new Date(),
+  };
+
+  return await accountsRepository.create(payload);
 }
 
-async function deleteAccount(id) {
-  return await accountsRepository.deleteAccount(id);
+async function updateAccount(accountNumber, data) {
+  return await accountsRepository.updateByAccountNumber(accountNumber, data);
+}
+
+async function deleteAccount(accountNumber) {
+  return await accountsRepository.deleteByAccountNumber(accountNumber);
 }
 
 module.exports = {
-  getAccounts,
-  getAccount,
+  getAllAccounts,
+  getAccountByNumber,
   createAccount,
   updateAccount,
   deleteAccount,

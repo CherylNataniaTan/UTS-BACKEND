@@ -1,64 +1,109 @@
+console.log("🔥 SERVICE KELOAD 🔥");
 const accountsService = require('./accounts-service');
+const { errorResponder, errorTypes } = require('../../../core/errors');
 
-async function getAccounts(request, response, next) {
+async function getAllAccounts(req, res, next) {
   try {
-    const accounts = await accountsService.getAccounts();
-    return response.status(200).json(accounts);
+    const accounts = await accountsService.getAllAccounts();
+    return res.status(200).json({
+      success: true,
+      total_data: accounts.length,
+      data: accounts,
+    });
   } catch (error) {
     return next(error);
   }
 }
 
-async function getAccount(request, response, next) {
+async function getAccountByNumber(req, res, next) {
   try {
-    const account = await accountsService.getAccount(request.params.id);
-    if (!account) return response.status(404).json({ message: 'Rekening tidak ditemukan' });
-    
-    return response.status(200).json(account);
-  } catch (error) {
-    return next(error);
-  }
-}
+    const { accountNumber } = req.params;
 
-async function createAccount(request, response, next) {
-  try {
-    const { namaPemilik, nomorRekening } = request.body;
-    if (!namaPemilik || !nomorRekening) {
-      return response.status(400).json({ message: 'Nama dan nomor rekening wajib diisi!!!' });
+    const account = await accountsService.getAccountByNumber(accountNumber);
+
+    if (!account) {
+      throw errorResponder(errorTypes.NOT_FOUND, 'Rekening tidak ditemukan');
     }
 
-    const account = await accountsService.createAccount(namaPemilik, nomorRekening);
-    return response.status(200).json(newAccount);
+    return res.status(200).json({
+      success: true,
+      data: account,
+    });
   } catch (error) {
     return next(error);
   }
 }
 
-async function updateAccount(request, response, next) {
+async function createAccount(req, res, next) {
   try {
-    const account = await accountsService.updateAccount(request.params.id, request.body);
-    if (!account) return response.status(404).json({ message: 'Gagal menambahkan ID. ID tidak terdaftar' });
+    const { accountName, ownerName, accountType } = req.body;
 
-    return response.status(200).json(account);
+    if (!accountName || !ownerName) {
+      throw errorResponder(
+        errorTypes.VALIDATION_ERROR,
+        'Nama rekening dan Nama pemilik wajib diisi'
+      );
+    }
+
+    const newAccount = await accountsService.createAccount({
+      accountName,
+      ownerName,
+      accountType,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: 'Rekening berhasil dibuat',
+      data: newAccount,
+    });
   } catch (error) {
     return next(error);
   }
 }
 
-async function deleteAccount(request, response, next) {
+async function updateAccount(req, res, next) {
   try {
-    const success = await accountsService.deleteAccount(request.params.id);
-    if (!success) return response.status(404).json({ message: 'Gagal menghapus, ID tidak ditemukan' });
+    const { accountNumber } = req.params;
+    const updateData = req.body;
 
-    return response.status(200).json({ message: 'Berhasil menghapus rekening' });
+    const updated = await accountsService.updateAccount(accountNumber, updateData);
+
+    if (!updated) {
+      throw errorResponder(errorTypes.NOT_FOUND, 'Rekening tidak ditemukan');
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Berhasil update rekening',
+      data: updated,
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function deleteAccount(req, res, next) {
+  try {
+    const { accountNumber } = req.params;
+
+    const deleted = await accountsService.deleteAccount(accountNumber);
+
+    if (!deleted) {
+      throw errorResponder(errorTypes.NOT_FOUND, 'Rekening tidak ditemukan');
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Rekening berhasil dihapus',
+    });
   } catch (error) {
     return next(error);
   }
 }
 
 module.exports = {
-  getAccounts,
-  getAccount,
+  getAllAccounts,
+  getAccountByNumber,
   createAccount,
   updateAccount,
   deleteAccount,

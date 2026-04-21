@@ -1,15 +1,11 @@
-const express = require('express');
 const accountsController = require('./accounts-controller');
 
-
 module.exports = (app) => {
-  const router = express.Router();
+  console.log("Accounts route loaded");
 
-  app.use('/accounts', router);
-
-  router.get('/', accountsController.getAccounts);
-  router.get('/:id', accountsController.getAccount);
-  router.post('/', accountsController.createAccount);
-  router.patch('/:id', accountsController.updateAccount);
-  router.delete('/:id', accountsController.deleteAccount);
+  app.get('/accounts', accountsController.getAllAccounts);
+  app.post('/accounts', accountsController.createAccount);
+  app.get('/accounts/:accountNumber', accountsController.getAccountByNumber);
+  app.patch('/accounts/:accountNumber', accountsController.updateAccount);
+  app.delete('/accounts/:accountNumber', accountsController.deleteAccount);
 };
