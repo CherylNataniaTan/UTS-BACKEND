@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "name": "uts-backe-end-programing",
   "version": "1.0.0",
   "description": "",
@@ -20,34 +19,3 @@
     "nodemon": "^3.1.14"
   }
 }
-=======
-  "name": "uts-backend-digital-banking",
-  "version": "1.0.0",
-  "description": "Backend API for Digital Banking System",
-  "main": "src/index.js",
-  "scripts": {
-    "dev": "nodemon src/index.js",
-    "start": "node src/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/CherylNataniaTan/UTS-BACKEND.git"
-  },
-  "keywords": ["express", "mongoose", "backend", "api"],
-  "author": "Cheryl Natania Tan",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/CherylNataniaTan/UTS-BACKEND/issues"
-  },
-  "homepage": "https://github.com/CherylNataniaTan/UTS-BACKEND#readme",
-  "dependencies": {
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "mongoose": "^9.4.1"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.14"
-  }
-}
->>>>>>> 7a554114880febfd7d4f128f92e7f2add859d2f6
