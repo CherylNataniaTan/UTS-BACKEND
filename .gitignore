@@ -1,0 +1,8 @@
+node_modules
+.env
+desktop.ini
+.DS_Store
+.eslintcache
+.npm
+node_modules/
+.env
