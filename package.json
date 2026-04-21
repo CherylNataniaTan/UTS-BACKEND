@@ -1,4 +1,14 @@
 {
+<<<<<<< HEAD
+  "name": "uts-backe-end-programing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+=======
   "name": "uts1",
   "version": "1.0.0",
   "description": "",
@@ -6,6 +16,7 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+>>>>>>> dee33b82721ab20b38fd0e8cda0d92246d6d31d8
   },
   "keywords": [],
   "author": "",
@@ -15,9 +26,12 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "mongoose": "^9.4.1",
+<<<<<<< HEAD
+=======
     "mongose": "^0.0.2-security"
   },
   "devDependencies": {
+>>>>>>> dee33b82721ab20b38fd0e8cda0d92246d6d31d8
     "nodemon": "^3.1.14"
   }
 }
